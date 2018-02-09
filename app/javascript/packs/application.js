@@ -20,11 +20,15 @@ $(document).ready(function() {
 
   // P1
   var isAvailableP1 = $('div#test').data('available-p1');
-  var colorP1 = '';
-  if (isAvailableP1) {
-    colorP1 = 'green';
-  } else {
-    colorP1 = 'red';
+  switch (isAvailableP1) {
+    case true:
+      var colorP1 = 'green';
+      break;
+    case false:
+      var colorP1 = 'red';
+      break;
+    default:
+      var colorP1 = 'gray';
   }
 
   var circleP1 = L.circle([56.96955, 24.16525], {
@@ -37,11 +41,15 @@ $(document).ready(function() {
 
   // P2
   var isAvailableP2 = $('div#test').data('available-p2');
-  var colorP2 = '';
-  if (isAvailableP2) {
-    colorP2 = 'green';
-  } else {
-    colorP2 = 'red';
+  switch (isAvailableP2) {
+    case true:
+      var colorP2 = 'green';
+      break;
+    case false:
+      var colorP2 = 'red';
+      break;
+    default:
+      var colorP2 = 'gray';
   }
 
   var circleP2 = L.circle([56.96948, 24.16535], {
@@ -54,11 +62,15 @@ $(document).ready(function() {
 
   // P3
   var isAvailableP3 = $('div#test').data('available-p3');
-  var colorP3 = '';
-  if (isAvailableP3) {
-    colorP3 = 'green';
-  } else {
-    colorP3 = 'red';
+  switch (isAvailableP3) {
+    case true:
+      var colorP3 = 'green';
+      break;
+    case false:
+      var colorP3 = 'red';
+      break;
+    default:
+      var colorP3 = 'gray';
   }
 
   var circleP3 = L.circle([56.96940, 24.16551], {
