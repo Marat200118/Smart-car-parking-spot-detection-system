@@ -75,6 +75,6 @@ test:
 #
 # You can use this database configuration with:
 #
-   production:
-     url: <%= ENV['DATABASE_URL'] %>
-     pool: <%= ENV["MAX_THREADS"] || 5 %>
+production:
+  url: <%= ENV['DATABASE_URL'] %>
+  pool: <%= ENV["MAX_THREADS"] || 5 %>
