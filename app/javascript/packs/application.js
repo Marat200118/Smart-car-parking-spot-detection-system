@@ -80,16 +80,17 @@ $(document).ready(function() {
   addMarkers();
 
 
-  var redMarker = L.AwesomeMarkers.icon({
+  const redMarker = L.AwesomeMarkers.icon({
     icon: 'glass',
     markerColor: 'red'
   });
 
-  var blueMarker = L.AwesomeMarkers.icon({
+  const blueMarker = L.AwesomeMarkers.icon({
     icon: 'home',
     markerColor: 'blue'
-  });
-    
+  });    
+
+
   L.marker(house.coordinates, {
     icon: blueMarker,
   }).addTo(map);
