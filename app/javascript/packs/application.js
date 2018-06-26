@@ -7,80 +7,254 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
-console.log('Hello World from Webpacker')
-
 import $ from "jquery";
 import L from "leaflet";
+import './application_styles.scss';
+import Control from 'leaflet-draw';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-draw/dist/leaflet.draw.css';
+import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.js';
+import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.css';
+import 'font-awesome/css/font-awesome.css';
+import ActionCable from 'es6-actioncable';
+import polyline from '@mapbox/polyline';
+import 'leaflet.animatedmarker/src/AnimatedMarker.js';
+
+
+const markers = {
+  p1_angle1: { coordinates: [56.962500, 24.098500] },
+  p1_angle29: { coordinates: [56.962504, 24.098580] },
+  p1_angle82: { coordinates: [56.9625070, 24.098660] },
+  p1_angle111: { coordinates: [56.9625100, 24.098740] },
+  p2_angle1: { coordinates: [56.9623900, 24.098450] },
+  p2_angle26: { coordinates: [56.9623500, 24.098450] },
+  p2_angle51: { coordinates: [56.9623100, 24.098450] }
+}
+
+const carLocations = {
+  car1: { coordinates: [56.961450, 24.100133] },
+  car2: { coordinates: [56.962214, 24.102098] },
+  car3: { coordinates: [56.962781, 24.103511] },
+  car4: { coordinates: [56.967647, 24.099375] },
+  car5: { coordinates: [56.965622, 24.100846] },
+  car6: { coordinates: [56.964779, 24.103732] }
+}
+
+const house = { coordinates: [56.9624800, 24.098250] }
+
 
 $(document).ready(function() {
-  var map = L.map('map').setView([56.96953, 24.16514], 19);
-  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+
+  var map = L.map('map').setView([56.962445, 24.098397], 18,)
+  L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+  subdomains: ['mt0','mt1','mt2','mt3']
+  }).addTo(map);
+  var editableLayers = new L.FeatureGroup();
+  map.addLayer(editableLayers);
+
+  function addMarkers() {
+    Object.keys(markers).forEach(device => {
+      const isAvailable = $('div#test').data('available-device_p1_angle1')
+      let color = 'gray'
+
+      if (isAvailable) {
+        color = 'green'
+      } else if (isAvailable === false) {
+        color = 'red'
+      }
+
+      const marker = L.circle(markers[device].coordinates, {
+        color: color,
+        fillColor: color,
+        radius: 1.7,
+        fillOpacity: 1
+      })
+
+      markers[device].isAvailable = isAvailable
+      markers[device].marker = marker
+      marker.addTo(map)
+            .bindPopup(device)
+    });
+  }
+
+  addMarkers();
+
+
+  var redMarker = L.AwesomeMarkers.icon({
+    icon: 'glass',
+    markerColor: 'red'
+  });
+
+  var blueMarker = L.AwesomeMarkers.icon({
+    icon: 'home',
+    markerColor: 'blue'
+  });
+    
+  L.marker(house.coordinates, {
+    icon: blueMarker,
   }).addTo(map);
 
-  // P1
-  var isAvailableP1 = $('div#test').data('available-p1');
-  switch (isAvailableP1) {
-    case true:
-      var colorP1 = 'green';
-      break;
-    case false:
-      var colorP1 = 'red';
-      break;
-    default:
-      var colorP1 = 'gray';
+  function findClosestParking() {
+    const origin = new google.maps.LatLng(house.coordinates);
+    const houseCoordinates = { location: new google.maps.LatLng(house.coordinates), stopover: true }
+    
+    const markerValues = Object.values(markers)
+    const mappedValues = markerValues.filter(marker => {
+      console.log(marker.isAvailable)
+      return marker.isAvailable == true || marker.isAvailable == undefined  
+    }).map(markerValue => {
+      return { lat: markerValue.coordinates[0], lng: markerValue.coordinates[1] }
+    })
+
+    console.log(mappedValues)
+
+    const directionService = new google.maps.DistanceMatrixService;
+    directionService.getDistanceMatrix(
+      {
+        origins: [{ lat: house.coordinates[0], lng: house.coordinates[1] }],
+        destinations: mappedValues,
+        travelMode: 'DRIVING'
+      },
+      function(res) {
+        const elements = res.rows[0].elements;
+        let prevValue = 100000000;
+        let closestMarker;
+        console.log(elements)
+        elements.forEach(function(element, index) {
+          if(element.distance.value < prevValue) {
+            closestMarker = mappedValues[index];
+            console.log(element.distance.value);
+          }
+          prevValue = element.distance.value 
+        })
+        calculateDirections(closestMarker);
+      }
+    )
   }
 
-  var circleP1 = L.circle([56.96955, 24.16525], {
-    color: colorP1,
-    fillColor: colorP1,
-    fillOpacity: 0.5,
-    radius: 2
-  }).addTo(map)
-  .bindPopup('P1');
+  let weatherMarker
 
-  // P2
-  var isAvailableP2 = $('div#test').data('available-p2');
-  switch (isAvailableP2) {
-    case true:
-      var colorP2 = 'green';
-      break;
-    case false:
-      var colorP2 = 'red';
-      break;
-    default:
-      var colorP2 = 'gray';
+  function toggleWeatherMarker() {
+    if (weatherMarker) {
+      weatherMarker.remove()
+      map.setZoom(18)
+      weatherMarker = null
+    } else {      
+      weatherMarker = L.circle(house.coordinates, {
+        color: 'green',
+        fillColor: 'green',
+        radius: 115,
+        fillOpacity: 0.2
+      })
+
+      weatherMarker.addTo(map)
+      weatherMarker.bindPopup('Temperature: 25°C, Humidity: 45%')
+      weatherMarker.openPopup()
+      map.setZoom(17);
+    }
   }
 
-  var circleP2 = L.circle([56.96948, 24.16535], {
-    color: colorP2,
-    fillColor: colorP2,
-    fillOpacity: 0.5,
-    radius: 2
-  }).addTo(map)
-  .bindPopup('P2');
-
-  // P3
-  var isAvailableP3 = $('div#test').data('available-p3');
-  switch (isAvailableP3) {
-    case true:
-      var colorP3 = 'green';
-      break;
-    case false:
-      var colorP3 = 'red';
-      break;
-    default:
-      var colorP3 = 'gray';
+  function toggleLastMeasures() {
+    const measuresContainer = document.getElementById('measures')
+    measuresContainer.classList.toggle('hidden')
   }
 
-  var circleP3 = L.circle([56.96940, 24.16551], {
-    color: colorP3,
-    fillColor: colorP3,
-    fillOpacity: 0.5,
-    radius: 2
-  }).addTo(map)
-  .bindPopup('P3');
+  
+
+  function calculateDirections(closest) {
+    const randomLocation = Object.values(carLocations)[Math.floor(Math.random() * Object.values(carLocations).length)];
+    const origin = new google.maps.LatLng(randomLocation.coordinates[0], randomLocation.coordinates[1]);
+    const destination = new google.maps.LatLng(closest);
+
+    const directionService = new google.maps.DirectionsService;
+    directionService.route(
+      {
+        origin: origin, 
+        destination: destination, 
+        travelMode: "DRIVING"
+      }, function(res) {
+        const line = res.routes[0].overview_polyline;
+        const decodedPoly = polyline.decode(line);
+
+        const firstpolyline = new L.Polyline(decodedPoly, {
+          color: 'black',
+          weight: 3,
+          opacity: 0.5,
+          smoothFactor: 1
+        });
 
 
+        const animatedMarker = L.animatedMarker(firstpolyline.getLatLngs(carLocations.coordinates), {
+          distance: 10,  
+          interval: 2000,
+          icon: redMarker
+        });
 
-});
+        clearMap();
+        animatedMarker.addTo(map);
+        firstpolyline.addTo(map);
+
+        // addMarkers();
+        // clearMap();
+
+
+      } 
+    )
+  }
+
+  function clearMap() {
+    let i;
+    for(i in map._layers) {
+      if(map._layers[i].options.distance > 0 || map._layers[i].options.color === "black") {
+        try {
+          console.log(map._layers[i])
+          map.removeLayer(map._layers[i]);
+        }
+        catch(e) {
+          console.log("problem with " + e + map._layers[i]);
+        }
+      }
+    }
+  }
+
+
+  ActionCable.createConsumer('/cable').subscriptions.create('MeasuresChannel', {
+    received: data => {
+      let color = 'gray'
+      if (data.is_available) {
+        color = 'green'
+      } else if (data.is_available === false) {
+        color = 'red'
+      }
+
+      console.log(data)
+      markers[data.device].marker.setStyle({ color: color, fillColor: color })
+      markers[data.device].isAvailable = data.is_available
+
+      let measuresContainer = $('calculate-container')
+      measuresContainer.empty()
+
+      measuresContainer.append()
+    }
+  })
+
+  const calculateButton = document.createElement("button"); 
+  
+  calculateButton.innerHTML = "Calculate route";
+  calculateButton.classList.add('button1')
+  document.getElementById('calculate-container').appendChild(calculateButton);
+  calculateButton.addEventListener('click', findClosestParking);
+
+
+  const weatherButton = document.createElement("button");
+
+  weatherButton.innerHTML = "Weather at destination";
+  weatherButton.classList.add('button2')
+  document.getElementById('weather-container').appendChild(weatherButton);
+  weatherButton.addEventListener('click', toggleWeatherMarker);
+
+
+  const historyButton = document.getElementById('history-button') // document.createElement("button");
+  historyButton.addEventListener('click', toggleLastMeasures);
+
+})

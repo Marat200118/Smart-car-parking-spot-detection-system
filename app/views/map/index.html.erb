@@ -1,10 +1,40 @@
-<div id='test' data-available-p1="<%= @p1&.available? %>" data-available-p2="<%= @p2&.available? %>" data-available-p3="<%= @p3&.available? %>"></div>
+<body style="background-color:white;">
+  <div id='test'
+  data-available-device_p1_angle1="<%= @device_p1_angle1&.available? %>"
+  data-available-device_p1_angle29="<%= @device_p1_angle29&.available? %>"
+  data-available-device_p1_angle82="<%= @device_p1_angle82&.available? %>"
+  data-available-device_p1_angle111="<%= @device_p1_angle111&.available? %>"
 
-<div id='map' style='height: 400px;'>
+  data-available-device_p2_angle1="<%= @device_p2_angle1&.available? %>"
+  data-available-device_p2_angle26="<%= @device_p2_angle26&.available? %>"
+  data-available-device_p2_angle51="<%= @device_p2_angle51&.available? %>"
+>
 </div>
 
-<h1>Measures</h1>
+  <div id='map' style='height: 500px;'>
+  </div>
+    <div class="container-fluid">
+      <h1>Home</h1>
+    </div>
 
-<% @measures.each do |measure| %>
-  <p>Device: <%= measure.device %> Angle: <%= measure.angle %> Distance: <%= measure.distance %> Created At: <%= measure.created_at %> (Available: <%= measure.available? ? 'Yes' : 'No' %>)</p>
-<% end %>
+    <div id='calculate-container' ></div>
+    <div id='weather-container'></div>
+
+
+    <div id='history-container'>
+      <button class="button3" id="history-button">Last measures</button>
+      <div id="measures">
+       <% @measures.each do |measure| %>
+          <p>Device: <%= measure.device %> Angle: <%= measure.angle %> Distance: <%= measure.distance %> Created At: <%= measure.created_at %> (Available: <%= measure.available? ? 'Yes' : 'No' %>)
+            Temperature: <%= measure.temperature  %>°C
+            Humidity: <%= measure.humidity %>% </p>
+        <% end %>
+      </div>
+    </div>
+      
+
+    <div class="CC">
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons Licence" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>.
+    </div>
+  <div>
+<div>

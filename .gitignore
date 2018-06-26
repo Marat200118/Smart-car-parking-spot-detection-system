@@ -13,7 +13,9 @@
 !/log/.keep
 !/tmp/.keep
 
-/gem
+.DS_store
+
+/.gem
 /node_modules
 /yarn-error.log
 
