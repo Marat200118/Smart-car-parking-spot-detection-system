@@ -5,7 +5,7 @@ application up and running.
 
 Things you may want to cover:
 
-* Ruby version
+* Check ruby, webpacker and yarn versions
 
 * System dependencies
 
@@ -13,12 +13,6 @@ Things you may want to cover:
 
 * Database creation
 
-* Database initialization
+* Update all yarn and webpacker packages
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* Start rails server and check workness

@@ -7,9 +7,18 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
+/* eslint no-console:0 */
+// This file is automatically compiled by Webpack, along with any other files
+// present in this directory. You're encouraged to place your actual application logic in
+// a relevant structure within app/javascript and only use these pack files to reference
+// that code so it'll be compiled.
+//
+// To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
+// layout file, like app/views/layouts/application.html.erb
+
 import $ from "jquery";
 import L from "leaflet";
-import './application_styles.scss';
+//import './application.scss';
 import Control from 'leaflet-draw';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
@@ -42,9 +51,7 @@ const carLocations = {
 
 const house = { coordinates: [56.9624800, 24.098250] }
 
-
 $(document).ready(function() {
-
   var map = L.map('map').setView([56.962445, 24.098397], 18,)
   L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
   subdomains: ['mt0','mt1','mt2','mt3']
@@ -80,17 +87,16 @@ $(document).ready(function() {
   addMarkers();
 
 
-  const redMarker = L.AwesomeMarkers.icon({
+  var redMarker = L.AwesomeMarkers.icon({
     icon: 'glass',
     markerColor: 'red'
   });
 
-  const blueMarker = L.AwesomeMarkers.icon({
+  var blueMarker = L.AwesomeMarkers.icon({
     icon: 'home',
     markerColor: 'blue'
-  });    
-
-
+  });
+    
   L.marker(house.coordinates, {
     icon: blueMarker,
   }).addTo(map);
@@ -239,7 +245,7 @@ $(document).ready(function() {
     }
   })
 
-  const calculateButton = document.createElement("button"); 
+  const calculateButton = document.createElement("button1"); 
   
   calculateButton.innerHTML = "Calculate route";
   calculateButton.classList.add('button1')
@@ -247,7 +253,7 @@ $(document).ready(function() {
   calculateButton.addEventListener('click', findClosestParking);
 
 
-  const weatherButton = document.createElement("button");
+  const weatherButton = document.createElement("button2");
 
   weatherButton.innerHTML = "Weather at destination";
   weatherButton.classList.add('button2')
