@@ -1,4 +1,4 @@
-/* eslint no-console:0 */
+/*eslint no-console:0 */
 // This file is automatically compiled by Webpack, along with any other files
 // present in this directory. You're encouraged to place your actual application logic in
 // a relevant structure within app/javascript and only use these pack files to reference
@@ -48,7 +48,7 @@ const carLocations = {
   car5: { coordinates: [56.965622, 24.100846] },
   car6: { coordinates: [56.964779, 24.103732] }
 }
-
+  
 const house = { coordinates: [56.9624800, 24.098250] }
 
 $(document).ready(function() {
@@ -163,6 +163,7 @@ $(document).ready(function() {
 
   function toggleLastMeasures() {
     const measuresContainer = document.getElementById('measures')
+    console.log(measuresContainer);
     measuresContainer.classList.toggle('hidden')
   }
 
@@ -245,23 +246,23 @@ $(document).ready(function() {
     }
   })
 
+
   const calculateButton = document.createElement("button1"); 
-  
-  calculateButton.innerHTML = "Calculate route";
-  calculateButton.classList.add('button1')
-  document.getElementById('calculate-container').appendChild(calculateButton);
-  calculateButton.addEventListener('click', findClosestParking);
+    calculateButton.innerHTML = "Calculate route";
+    calculateButton.classList.add('button1')
+    document.getElementById('calculate-container').appendChild(calculateButton);
+    calculateButton.addEventListener('click', findClosestParking);
+
 
 
   const weatherButton = document.createElement("button2");
+    weatherButton.innerHTML = "Weather at destination";
+    weatherButton.classList.add('button2')
+    document.getElementById('weather-container').appendChild(weatherButton);
+    weatherButton.addEventListener('click', toggleWeatherMarker);
 
-  weatherButton.innerHTML = "Weather at destination";
-  weatherButton.classList.add('button2')
-  document.getElementById('weather-container').appendChild(weatherButton);
-  weatherButton.addEventListener('click', toggleWeatherMarker);
 
-
-  const historyButton = document.getElementById('history-button') // document.createElement("button");
-  historyButton.addEventListener('click', toggleLastMeasures);
+  const historyButton = document.getElementById('history-button')
+    historyButton.addEventListener('click', toggleLastMeasures);
 
 })
