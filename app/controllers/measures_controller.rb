@@ -6,8 +6,9 @@ class MeasuresController < ApplicationController
       device:   params[:device],
       angle:    params[:angle].to_i,
       distance: params[:distance].to_i,
-      temperature: params[:temperature].to_i,
-      humidity: params[:humidity].to_i, 
+      # Add in migration before lol - noob?
+      #temperature: params[:temperature].to_i,
+      #humidity: params[:humidity].to_i, 
       available: ActiveModel::Type::Boolean.new.cast(params[:available])
     )
 

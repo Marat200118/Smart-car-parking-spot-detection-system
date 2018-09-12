@@ -28,8 +28,6 @@
       <div id="measures">
        <% @measures.each do |measure| %>
           <p>Device: <%= measure.device %> Angle: <%= measure.angle %> Distance: <%= measure.distance %> Created At: <%= measure.created_at %> (Available: <%= measure.available? ? 'Yes' : 'No' %>)
-            Temperature: <%= measure.temperature  %>°C
-            Humidity: <%= measure.humidity %>% </p>
         <% end %>
       </div>
     </div>
@@ -40,4 +38,3 @@
     </div>
   <div>
 <div>
-

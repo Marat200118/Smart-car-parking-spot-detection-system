@@ -41,7 +41,7 @@ const markers = {
 }
 
 const carLocations = {
-  car1: { coordinates: [56.961450, 24.100133] },
+  car1: { coordinates: [56.961450, 24.100133] },  
   car2: { coordinates: [56.962214, 24.102098] },
   car3: { coordinates: [56.962781, 24.103511] },
   car4: { coordinates: [56.967647, 24.099375] },
