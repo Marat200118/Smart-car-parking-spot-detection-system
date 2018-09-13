@@ -15,9 +15,9 @@ class Measure < ApplicationRecord
   scope :device_p1_angle111, -> { where(angle: 111, device: 'Infra').where('created_at >= ?', DateTime.current - 2.minutes)}
 
   #ultrasonic device
-  scope :device_p2_angle1, -> { where(angle: 50, device: 'Ultra').where('created_at >= ?', DateTime.current - 2.minutes)}
-  scope :device_p2_angle50, -> { where(angle: 75, device: 'Ultra').where('created_at >= ?', DateTime.current - 2.minutes)} 
-  scope :device_p2_angle75, -> { where(angle: 100, device: 'Ultra').where('created_at >= ?', DateTime.current - 2.minutes)} 
+  scope :device_p2_angle50, -> { where(angle: 50, device: 'Ultra').where('created_at >= ?', DateTime.current - 2.minutes)}
+  scope :device_p2_angle75, -> { where(angle: 75, device: 'Ultra').where('created_at >= ?', DateTime.current - 2.minutes)} 
+  scope :device_p2_angle100, -> { where(angle: 100, device: 'Ultra').where('created_at >= ?', DateTime.current - 2.minutes)} 
 
   def available?
     case device_identificator
