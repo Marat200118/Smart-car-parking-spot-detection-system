@@ -35,9 +35,9 @@ const markers = {
   p1_angle29: { coordinates: [56.962504, 24.098580] },
   p1_angle82: { coordinates: [56.9625070, 24.098660] },
   p1_angle111: { coordinates: [56.9625100, 24.098740] },
-  p2_angle1: { coordinates: [56.9623900, 24.098450] },
-  p2_angle26: { coordinates: [56.9623500, 24.098450] },
-  p2_angle51: { coordinates: [56.9623100, 24.098450] }
+  p2_angle50: { coordinates: [56.9623900, 24.098450] },
+  p2_angle75: { coordinates: [56.9623500, 24.098450] },
+  p2_angle100: { coordinates: [56.9623100, 24.098450] }
 }
 
 const carLocations = {

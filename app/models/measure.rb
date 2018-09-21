@@ -21,12 +21,12 @@ class Measure < ApplicationRecord
 
   def available?
     case device_identificator
-    when 'p2_angle1', 'p2_angle75', 'p1_angle82', 'p1_angle29'
+    when 'p2_angle50', 'p2_angle100', 'p1_angle82', 'p1_angle29'
       distance >= 28
-    when 'p2_angle50'
-      distance >= 22
-    when 'p1_angle111', 'p1_angle1'
-      distance >= 41
+    when 'p2_angle75'
+      distance >= 24
+    when 'p1_angle111', 'p1_angle1' 
+      distance >= 30
     end
   end
 
